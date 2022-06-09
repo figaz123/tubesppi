@@ -1,11 +1,11 @@
 //antares
-#include <AntaresESP8266MQTT.h>     // Inisiasi library MQTT Antares
+#include <AntaresESP8266HTTP.h>     // Inisiasi library MQTT Antares
 #define ACCESSKEY "eaa004f588aae95e:3a0abb142e3eafdd" //define accesskey
 #define WIFISSID "mylaptop"//define SSID name
 #define PASSWORD "senyumdulu"     // Ganti dengan password WiFi anda
-#define projectName "NodeMCU_MQTT_PPI" //define project name
-#define deviceName "Nilai_sensor"    // Ganti dengan device Antares yang telah dibuat
-AntaresESP8266MQTT antares(ACCESSKEY); 
+#define projectName "NodeMCU_HTTP_PPI" //define project name
+#define deviceName "Sensor"    // Ganti dengan device Antares yang telah dibuat
+AntaresESP8266HTTP antares(ACCESSKEY); 
 
 
 //include servo
@@ -32,7 +32,7 @@ void setup() {
   //Serial.begin(115200);     // Buka komunikasi serial dengan baudrate 115200
   antares.setDebug(true);   // Nyalakan debug. Set menjadi "false" jika tidak ingin pesan-pesan tampil di serial monitor
   antares.wifiConnection(WIFISSID,PASSWORD);  // Mencoba untuk menyambungkan ke WiFi
-  antares.setMqttServer();  // Inisiasi server MQTT Antares
+  //antares.setMqttServer();  // Inisiasi server MQTT Antares
   
   
  pinMode (led, OUTPUT);
@@ -44,7 +44,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   //antares
-  antares.checkMqttConnection();
+  //antares.checkMqttConnection();
   
 
   cahaya = digitalRead(D2);
@@ -55,6 +55,7 @@ void loop() {
   antares.add("Soil value ", soilValue);
 
   if(cahaya > 0){
+    Serial.println(cahaya);
     digitalWrite(led, HIGH);
     Serial.println("LED on");
     kondisiLED = 1;
@@ -77,7 +78,7 @@ void loop() {
     antares.add("Kondisi servo (1 menyala 0 mati) ", nilai_servo);
     }
 
-  antares.publish(projectName, deviceName);
+  antares.send(projectName, deviceName);
   delay(10000);
   
 }
