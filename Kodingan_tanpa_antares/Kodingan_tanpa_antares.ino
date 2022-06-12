@@ -1,4 +1,3 @@
-
 /*
 //antares
 #include <AntaresESP8266MQTT.h>     // Inisiasi library MQTT Antares
@@ -8,10 +7,12 @@
 #define projectName "NodeMCU_MQTT_PPI" //define project name
 #define deviceName "Nilai_sensor"    // Ganti dengan device Antares yang telah dibuat
 AntaresESP8266MQTT antares(ACCESSKEY); 
-
 */
 //include servo
-#include<Servo.h>
+//#include<Servo.h>
+
+//relay variable
+const int relay_pin = D2;
 
 //variable led dan ldr
 const int led = D4;
@@ -23,8 +24,8 @@ const int limit = 300;
 int soilValue;
 
 //servo
-int nilai_servo;
-Servo servoku;
+int nilai_keran;
+//Servo servoku;
 
 void setup() {
   // put your setup code here, to run once:
@@ -37,8 +38,9 @@ void setup() {
   */
   
  pinMode (led, OUTPUT);
+ pinMode (relay_pin, OUTPUT);
  Serial.begin(9600);
- servoku.attach(D1);
+// servoku.attach(D1);
 
 }
 
@@ -61,17 +63,19 @@ void loop() {
     }
   
   if(soilValue < limit){
-    servoku.write(10);
+    //servoku.write(10);
+    digitalWrite(relay_pin, HIGH);
     delay(10000);
-    servoku.write(100);
-    delay(1000);
-    nilai_servo = 1;
-    //antares.add("Kondisi servo (1 menyala 0 mati):", nilai_servo);
+    digitalWrite(relay_pin, LOW);
+    //servoku.write(100);
+    //delay(1000);
+    nilai_keran = 1;
+    //antares.add("Kondisi servo (1 menyala 0 mati):", nilai_keran);
   }
   else{
     Serial.println("Tanah belum kering");
-    nilai_servo = 0;
-    //antares.add("Kondisi servo (1 menyala 0 mati):", nilai_servo);
+    nilai_keran = 0;
+    //antares.add("Kondisi servo (1 menyala 0 mati):", nilai_keran);
     }
 
  // antares.publish(projectName, deviceName);
